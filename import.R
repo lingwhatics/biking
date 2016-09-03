@@ -10,14 +10,21 @@ biketrips <-
 library(lubridate)
 biketrips$X <- ymd_hms(paste(biketrips$Date, biketrips$Time, sep = " "))
 
+today_trip <- subset(biketrips, Date == Sys.Date())
 
 #plots
 library(ggplot2)
 p <- ggplot(biketrips, aes(Longitude, Latitude, colour = Date))
-p + geom_point()
+p <- p + geom_point()
+p
+ggsave("all.png", dpi = 300, width = 10, height  = 6)
 
 q <- ggplot(biketrips, aes(Longitude, Latitude, colour = year(Date)))
 q + geom_point()
 
 r <- ggplot(biketrips, aes(Longitude, Latitude, colour = am(X)))
 r + geom_point()
+
+p2 <- ggplot(today_trip, aes(Longitude, Latitude))
+p2 <- p2 + geom_point()
+p2
