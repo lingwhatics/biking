@@ -29,6 +29,7 @@ p2 <- ggplot(today_trip, aes(Longitude, Latitude))
 p2 <- p2 + geom_point()
 p2
 
+p <- ggplot(biketrips, aes(Longitude, Latitude)) + geom_point()
 p + geom_point(data = today_trip, aes(Longitude, Latitude, colour = Date)) + 
   theme(legend.position="none")
 ggsave("today_overlay.png", dpi = 300, width = 6, height  = 6)
