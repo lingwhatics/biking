@@ -44,4 +44,4 @@ focus_today <- ggplot(biketrips, aes(Longitude, Latitude)) + geom_point() +
   geom_point(data = today_trip, aes(Longitude, Latitude, colour = Date)) + 
   theme(legend.position="none")
 focus_today
-ggsave("today_overlay.png", dpi = 300, width = 6, height  = 6)
+ggsave("today_overlay.png", dpi = 300, width = 8, height  = 6)
