@@ -11,11 +11,12 @@ biketrips <-
                  function(x)
                    read.csv(paste0(folder, x), stringsAsFactors = FALSE ))) 
                           
-# Pasre date-times
+# Parse date-times
 biketrips <- biketrips %>% 
   mutate(date_time = ymd_hms(paste(biketrips$Date, biketrips$Time, sep = " ")))
 
 # Get subset of today's trips only
+Sys.setenv(tz = "America/Toronto") # temporary fix for High Sierra timezone reporting
 today_trip <- biketrips %>% filter(Date == Sys.Date())
 
 # Plot all trips in record and export as PNG
@@ -47,3 +48,12 @@ focus_today <- ggplot(biketrips, aes(Longitude, Latitude)) + geom_point() +
   theme(legend.position="none") + coord_map()
 focus_today
 ggsave("today_overlay.png", dpi = 300, width = 8, height  = 6)
+
+# Plot density heatmap of all trips in record and export as PNG
+all_trips_heat <- ggplot(biketrips, aes(Longitude, Latitude)) + 
+  borders() + 
+  xlim(c(-79.5, -79.2)) + ylim(c(43.5, 43.9)) +
+  geom_density()
+all_trips_heat
+ggsave("all_heat.png", dpi = 300, width = 10, height  = 6)
+
