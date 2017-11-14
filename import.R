@@ -13,10 +13,10 @@ biketrips <-
                           
 # Parse date-times
 biketrips <- biketrips %>% 
-  mutate(date_time = ymd_hms(paste(biketrips$Date, biketrips$Time, sep = " ")))
+  mutate(date_time = ymd_hms(paste(biketrips$Date, biketrips$Time, sep = " ")), tz = "America/Toronto")
 
 # Get subset of today's trips only
-Sys.setenv(tz = "America/Toronto") # temporary fix for High Sierra timezone reporting
+Sys.setenv(TZ = "America/Toronto") # temporary fix for High Sierra timezone reporting
 today_trip <- biketrips %>% filter(Date == Sys.Date())
 
 # Plot all trips in record and export as PNG
@@ -49,11 +49,24 @@ focus_today <- ggplot(biketrips, aes(Longitude, Latitude)) + geom_point() +
 focus_today
 ggsave("today_overlay.png", dpi = 300, width = 8, height  = 6)
 
+# Create summary counts for heatmap
+trips_summary <- biketrips %>% mutate(lat_grp = round(Latitude, 3), 
+                                      lon_grp = round(Longitude, 3),
+                                      yr = as.factor(year(Date))) %>%
+  group_by(lat_grp, lon_grp) %>%
+  summarize(points = n())
+  
 # Plot density heatmap of all trips in record and export as PNG
-all_trips_heat <- ggplot(biketrips, aes(Longitude, Latitude)) + 
-  borders() + 
-  xlim(c(-79.5, -79.2)) + ylim(c(43.5, 43.9)) +
-  geom_density()
-all_trips_heat
-ggsave("all_heat.png", dpi = 300, width = 10, height  = 6)
+# all_trips_heat <- ggplot(trips_summary, aes(lon_grp, lat_grp)) + 
+#   borders() + 
+#   xlim(c(-79.6, -79.25)) + ylim(c(43.5, 43.85)) +
+#   stat_density_2d(aes(fill = ..level.., alpha = ..level..),geom = "polygon")
+# all_trips_heat
+# ggsave("all_heat.png", dpi = 300, width = 10, height  = 6)
 
+all_trips_dots <- ggplot(trips_summary, 
+                         aes(lon_grp, lat_grp, 
+                             alpha = points / max(points),
+                             colour = "red")) +
+  geom_point() + theme(legend.position="none") + coord_map()
+all_trips_dots
