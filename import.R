@@ -16,7 +16,6 @@ biketrips <- biketrips %>%
   mutate(date_time = ymd_hms(paste(biketrips$Date, biketrips$Time, sep = " ")), tz = "America/Toronto")
 
 # Get subset of today's trips only
-Sys.setenv(TZ = "America/Toronto") # temporary fix for High Sierra timezone reporting
 today_trip <- biketrips %>% filter(Date == Sys.Date())
 
 # Plot all trips in record and export as PNG
