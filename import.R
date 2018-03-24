@@ -51,7 +51,7 @@ focus_today <- ggplot(biketrips, aes(Longitude, Latitude)) + geom_point() +
   theme(legend.position="none") + coord_map() + 
   scale_colour_viridis(direction = -1, discrete = TRUE, alpha = 0.5)
 focus_today
-ggsave("today_overlay.png", dpi = 300, width = 8, height  = 6)
+ggsave(paste0(format(today(), "%Y-%m-%d"),"_overlay.png"), dpi = 300, width = 8, height  = 6)
 
 # Create summary counts for heatmap
 trips_summary <- biketrips %>% mutate(lat_grp = round(Latitude, 3), 
