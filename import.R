@@ -61,16 +61,28 @@ trips_summary <- biketrips %>% mutate(lat_grp = round(Latitude, 3),
   summarize(points = n())
   
 # Plot density heatmap of all trips in record and export as PNG
-# all_trips_heat <- ggplot(trips_summary, aes(lon_grp, lat_grp)) + 
-#   borders() + 
-#   xlim(c(-79.6, -79.25)) + ylim(c(43.5, 43.85)) +
-#   stat_density_2d(aes(fill = ..level.., alpha = ..level..),geom = "polygon")
-# all_trips_heat
+all_trips_heat <- ggplot(trips_summary, aes(lon_grp, lat_grp)) +
+  borders() +
+  xlim(c(-79.6, -79.25)) + ylim(c(43.5, 43.85)) +
+  stat_density_2d(aes(fill = ..level.., alpha = ..level..), geom = "polygon")
+all_trips_heat
 # ggsave("all_heat.png", dpi = 300, width = 10, height  = 6)
 
-all_trips_dots <- ggplot(trips_summary, 
+trips_summary <- trips_summary %>% mutate(freq = case_when(
+  points < 10 ~ "<10",
+  points <20 ~ "11 to 20",
+  points <30 ~ "21 to 30",
+  points <40 ~ "31 to 40",
+  TRUE ~ ">40"
+  ),
+  freq = factor(freq, levels = c("<10", "11 to 20",
+                                   "21 to 30", "31 to 40",
+                                   ">40")))
+
+all_trips_dots <- ggplot(trips_summary %>% filter(points < 100), 
                          aes(lon_grp, lat_grp, 
-                             alpha = points / max(points),
-                             colour = "red")) +
-  geom_point() + theme(legend.position="none") + coord_map()
+                             colour = points)) +
+  scale_colour_viridis() +
+  geom_point() + coord_map() #+ theme(legend.position="none")
 all_trips_dots
+
