@@ -28,9 +28,12 @@ ggsave("all.png", dpi = 300, width = 10, height  = 6)
 
 # Plot trips by year
 by_year <- ggplot(biketrips, 
-            aes(Longitude, Latitude, colour = as.factor(year(Date)))) +
-  geom_point() + guides(colour = guide_legend(title = "Year"))  + coord_map() +
-  scale_colour_viridis(discrete = TRUE, alpha = 0.5)
+            aes(Longitude, Latitude)) +
+  geom_point() + 
+  guides(colour = guide_legend(title = "Year"))  + 
+  coord_map() +
+  scale_colour_viridis(discrete = TRUE, alpha = 0.5) + 
+  facet_wrap(~year(Date))
 by_year
 
 # Plot showing which parts of trips were in the morning vs. the afternoon
