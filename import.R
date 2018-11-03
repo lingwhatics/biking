@@ -19,11 +19,11 @@ biketrips <- biketrips %>%
 # Get subset of today's trips only
 today_trip <- biketrips %>% filter(Date == Sys.Date())
 
-# Plot all trips in record and export as PNG
-all_trips <- ggplot(biketrips, aes(Longitude, Latitude, colour = Date)) + 
-  geom_point() + coord_map() +
-  scale_colour_viridis(discrete = TRUE)
-all_trips
+# Plot all trips in record
+# all_trips <- ggplot(biketrips, aes(Longitude, Latitude, colour = Date)) + 
+#   geom_point() + coord_map() +
+#   scale_colour_viridis(discrete = TRUE)
+# all_trips
 
 # Plot trips by year
 by_year <- ggplot(biketrips, 
