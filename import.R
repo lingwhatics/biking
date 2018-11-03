@@ -4,7 +4,7 @@ library(lubridate)
 library(viridis)
 
 # Get data (exported from the City of Toronto cycling app)
-folder <- "~/Documents/GIS_data/Bike_Trips/"
+folder <- "Bike_Trips/"
 file_list <- list.files(path=folder, pattern = "*.csv")
 biketrips <-
   do.call("rbind",
