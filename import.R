@@ -1,7 +1,6 @@
 # Libraries
 library(tidyverse)
 library(lubridate)
-library(viridis)
 
 # Get data (exported from the City of Toronto cycling app)
 folder <- "Bike_Trips/"
@@ -14,7 +13,8 @@ biketrips <-
                           
 # Parse date-times
 biketrips <- biketrips %>% 
-  mutate(date_time = ymd_hms(paste(biketrips$Date, biketrips$Time, sep = " ")), tz = "America/Toronto")
+  mutate(date_time = ymd_hms(paste(biketrips$Date, biketrips$Time, sep = " ")),
+         tz = "America/Toronto")
 
 # Get subset of today's trips only
 today_trip <- biketrips %>% filter(Date == Sys.Date())
@@ -24,23 +24,22 @@ all_trips <- ggplot(biketrips, aes(Longitude, Latitude, colour = Date)) +
   geom_point() + coord_map() +
   scale_colour_viridis(discrete = TRUE)
 all_trips
-ggsave("all.png", dpi = 300, width = 10, height  = 6)
 
 # Plot trips by year
 by_year <- ggplot(biketrips, 
-            aes(Longitude, Latitude)) +
+            aes(Longitude, Latitude, colour = year(Date))) +
   geom_point() + 
   guides(colour = guide_legend(title = "Year"))  + 
   coord_map() +
-  scale_colour_viridis(discrete = TRUE, alpha = 0.5) + 
-  facet_wrap(~year(Date))
+  scale_colour_viridis_c()
 by_year
+ggsave("all.png", dpi = 300, width = 10, height  = 6)
 
 # Plot showing which parts of trips were in the morning vs. the afternoon
 am_pm_trips <- ggplot(biketrips, aes(Longitude, Latitude, colour = am(date_time))) + 
   geom_point() + coord_map() +
   guides(colour = guide_legend(title = "Morning Ride?")) +
-  scale_colour_viridis(discrete = TRUE, alpha = 0.5)
+  scale_colour_viridis_d()
 am_pm_trips
 
 # Plot just today's trip
@@ -49,10 +48,12 @@ todays_ride <- ggplot(today_trip, aes(Longitude, Latitude)) +
 todays_ride
 
 # Plot with all trips in grey in the background and today's trip in colour
-focus_today <- ggplot(biketrips, aes(Longitude, Latitude)) + geom_point() + 
+focus_today <- ggplot(biketrips, aes(Longitude, Latitude)) + 
+  geom_point() + 
   geom_point(data = today_trip, aes(Longitude, Latitude, colour = Date)) + 
-  theme(legend.position="none") + coord_map() + 
-  scale_colour_viridis(direction = -1, discrete = TRUE, alpha = 0.5)
+  theme(legend.position="none") + 
+  coord_map() + 
+  scale_colour_viridis_d(direction = -1)
 focus_today
 ggsave(paste0(format(today(), "%Y-%m-%d"),"_overlay.png"), dpi = 300, width = 8, height  = 6)
 
