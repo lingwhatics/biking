@@ -44,7 +44,8 @@ am_pm_trips
 
 # Plot just today's trip
 todays_ride <- ggplot(today_trip, aes(Longitude, Latitude)) + 
-  geom_point() + coord_map()
+  geom_point() + 
+  coord_map()
 todays_ride
 
 # Plot with all trips in grey in the background and today's trip in colour
@@ -58,16 +59,18 @@ focus_today
 ggsave(paste0(format(today(), "%Y-%m-%d"),"_overlay.png"), dpi = 300, width = 8, height  = 6)
 
 # Create summary counts for heatmap
-trips_summary <- biketrips %>% mutate(lat_grp = round(Latitude, 3), 
-                                      lon_grp = round(Longitude, 3),
-                                      yr = as.factor(year(Date))) %>%
+trips_summary <- biketrips %>% 
+  mutate(lat_grp = round(Latitude, 3),
+         lon_grp = round(Longitude, 3),
+         yr = as.factor(year(Date))) %>%
   group_by(lat_grp, lon_grp) %>%
   summarize(points = n())
   
 # Plot density heatmap of all trips in record and export as PNG
 all_trips_heat <- ggplot(trips_summary, aes(lon_grp, lat_grp)) +
   borders() +
-  xlim(c(-79.6, -79.25)) + ylim(c(43.5, 43.85)) +
+  xlim(c(-79.6, -79.25)) + 
+  ylim(c(43.5, 43.85)) +
   stat_density_2d(aes(fill = ..level.., alpha = ..level..), geom = "polygon")
 all_trips_heat
 # ggsave("all_heat.png", dpi = 300, width = 10, height  = 6)
