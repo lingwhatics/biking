@@ -67,3 +67,4 @@ vignettes/*.pdf
 .Rproj.user
 
 *.png
+/Bike_Trips/
