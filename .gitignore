@@ -68,3 +68,4 @@ vignettes/*.pdf
 
 *.png
 /Bike_Trips/
+*.rds
