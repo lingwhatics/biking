@@ -93,3 +93,6 @@ all_trips_dots <- ggplot(trips_summary %>% filter(points < 100),
   geom_point() + coord_map() #+ theme(legend.position="none")
 all_trips_dots
 
+saveRDS(biketrips, "bike_trips.rds")
+
+
