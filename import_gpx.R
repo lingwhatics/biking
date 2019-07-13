@@ -38,6 +38,8 @@ gpx <- gpx %>% select(date, time, latitude, longitude, X, date_time, tz) %>%
 #biketrips <- readRDS("bike_trips.rds") %>% clean_names()        
 #biketrips <- bind_rows(biketrips, gpx)
 
+biketrips <- gpx
+
 # Get subset of today's trips only
 today_trip <- biketrips %>% filter(date == Sys.Date())
 
