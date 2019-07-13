@@ -34,9 +34,9 @@ gpx <- gpx %>% select(date, time, latitude, longitude, X, date_time, tz) %>%
          longitude = as.numeric(longitude),
          date_time = as.POSIXct(date_time))
 
-biketrips <- readRDS("bike_trips.rds") %>% clean_names()        
-
-biketrips <- bind_rows(biketrips, gpx)
+# uncomment if you want to include older rides in other cities
+#biketrips <- readRDS("bike_trips.rds") %>% clean_names()        
+#biketrips <- bind_rows(biketrips, gpx)
 
 # Get subset of today's trips only
 today_trip <- biketrips %>% filter(date == Sys.Date())
