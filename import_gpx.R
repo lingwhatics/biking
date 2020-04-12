@@ -55,6 +55,7 @@ focus_today <- biketrips %>% filter(tz == "America/Montreal") %>%
   ggplot(aes(longitude, latitude)) + 
   geom_point() + 
   geom_point(data = today_trip, aes(longitude, latitude, colour = date)) + 
+  theme_void() +
   theme(legend.position="none") + 
   coord_map() + 
   scale_colour_viridis_d(direction = -1)
