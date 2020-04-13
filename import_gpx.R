@@ -53,8 +53,8 @@ todays_ride
 # limit to Montreal
 focus_today <- biketrips %>% filter(tz == "America/Montreal") %>%
   ggplot(aes(longitude, latitude)) + 
-  geom_point() + 
-  geom_point(data = today_trip, aes(longitude, latitude, colour = date)) + 
+  geom_point(size = 0.7) + 
+  geom_point(data = today_trip, aes(longitude, latitude, colour = date), size = 0.7) + 
   theme_void() +
   theme(legend.position="none") + 
   coord_map() + 
