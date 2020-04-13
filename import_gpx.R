@@ -8,6 +8,7 @@ library(janitor)
 folder <- "Bike_Trips/"
 file_list <- list.files(path=folder, pattern = "*.gpx")
 
+# define function for parsing GPX inputs
 parse_GPX <- function(filename) {
   filename %>%
   xmlTreeParse(useInternalNodes = TRUE) %>%
