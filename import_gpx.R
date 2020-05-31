@@ -67,3 +67,4 @@ focus_today
 ggsave(paste0(format(today(), "%Y-%m-%d"),"_overlay.png"), 
        dpi = 300, width = 8, height  = 6)
 
+write_rds(biketrips, "trips.rds")
