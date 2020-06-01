@@ -41,8 +41,16 @@ gpx <- gpx %>%
 
 biketrips <- gpx
 
+# reduce data points where they only add clutter
+biketrips2 <- biketrips %>%
+  mutate(reduce = case_when(
+    date == lag(date) & round(latitude, 4) == lag(round(latitude, 4)) & round(longitude, 4) == lag(round(longitude, 4)) ~ NA_real_,
+    TRUE ~ 1
+  )) %>%
+  drop_na(reduce)
+
 # Get subset of today's trips only
-today_trip <- biketrips %>% filter(date == Sys.Date())
+today_trip <- biketrips2 %>% filter(date == Sys.Date())
 
 # Plot just today's trip
 todays_ride <- ggplot(today_trip, aes(longitude, latitude)) + 
@@ -52,7 +60,7 @@ todays_ride
 
 # Plot with all trips in grey in the background and today's trip in colour
 # limit to Montreal
-focus_today <- biketrips %>% 
+focus_today <- biketrips2 %>% 
   filter(tz == "America/Montreal") %>%
   ggplot(aes(longitude, latitude)) + 
   geom_point(size = 0.7) + 
