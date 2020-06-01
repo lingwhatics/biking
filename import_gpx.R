@@ -53,7 +53,8 @@ biketrips2 <- biketrips %>%
 today_trip <- biketrips2 %>% filter(date == Sys.Date())
 
 # Plot just today's trip
-todays_ride <- ggplot(today_trip, aes(longitude, latitude)) + 
+todays_ride <- today_trip %>%
+  ggplot(aes(longitude, latitude)) + 
   geom_point() + 
   coord_map()
 todays_ride
