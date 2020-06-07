@@ -3,6 +3,7 @@ library(XML)
 library(tidyverse)
 library(lubridate)
 library(janitor)
+library(ggthemes)
 
 # Get data (exported from STRAVA)
 folder <- "Bike_Trips/"
@@ -50,10 +51,12 @@ biketrips2 <- biketrips %>%
   drop_na(reduce)
 
 # Get subset of today's trips only
-today_trip <- biketrips2 %>% filter(date == Sys.Date())
+biketrips2 <- biketrips2 %>% 
+  mutate(today = as.factor(if_else(date == Sys.Date(), 1, 0)))
 
 # Plot just today's trip
-todays_ride <- today_trip %>%
+todays_ride <- biketrips2 %>%
+  filter(today == 1) %>%
   ggplot(aes(longitude, latitude)) + 
   geom_point() + 
   coord_map()
@@ -63,15 +66,17 @@ todays_ride
 # limit to Montreal
 focus_today <- biketrips2 %>% 
   filter(tz == "America/Montreal") %>%
-  ggplot(aes(longitude, latitude)) + 
+  ggplot(aes(longitude, latitude, colour = today)) + 
   geom_point(size = 0.7) + 
-  geom_point(data = today_trip, 
-             aes(longitude, latitude, colour = date), 
-             size = 0.7) + 
+  #geom_point(data = today_trip, 
+  #           aes(longitude, latitude, colour = date), 
+  #           size = 0.7) + 
   theme_void() +
   theme(legend.position="none") + 
   coord_map() + 
-  scale_colour_viridis_d(direction = -1)
+  ggthemes::scale_color_colorblind() +
+  NULL
+
 focus_today
 ggsave(paste0(format(today(), "%Y-%m-%d"),"_overlay.png"), 
        dpi = 300, width = 8, height  = 6)
