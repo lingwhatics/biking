@@ -53,6 +53,7 @@ biketrips2 <- biketrips %>%
 # Get subset of today's trips only
 biketrips2 <- biketrips2 %>% 
   mutate(today = as.factor(if_else(date == Sys.Date(), 1, 0)))
+  #mutate(today = as.factor(if_else(date == "2020-06-17", 1, 0)))
 
 # Plot just today's trip
 todays_ride <- biketrips2 %>%
