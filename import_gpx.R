@@ -42,7 +42,10 @@ gpx <- gpx %>%
 
 biketrips <- gpx
 
-# reduce data points where they only add clutter
+# write out updated data
+write_rds(biketrips, "trips.rds")
+
+# reduce number of data points where they only add clutter
 biketrips2 <- biketrips %>%
   mutate(reduce = case_when(
     date == lag(date) & round(latitude, 4) == lag(round(latitude, 4)) & round(longitude, 4) == lag(round(longitude, 4)) ~ NA_real_,
