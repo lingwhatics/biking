@@ -69,7 +69,7 @@ biketrips2 <- biketrips %>%
 # Get subset of today's trips only
 biketrips2 <- biketrips2 %>% 
   mutate(today = as.factor(if_else(date == Sys.Date(), 1, 0)))
-  #mutate(today = as.factor(if_else(date == "2020-07-28", 1, 0)))
+  #mutate(today = as.factor(if_else(date == "2020-08-11", 1, 0)))
 
 # Plot just today's trip
 todays_ride <- biketrips2 %>%
@@ -85,7 +85,7 @@ limits <- biketrips2 %>%
             max_lon = max(longitude),
             min_lat = min(latitude),
             max_lat = max(latitude)) %>%
-  mutate_all(~ signif(.,digits = 4))
+  mutate_all(~ signif(.,digits = 5))
 
 # Plot with all trips in grey in the background and today's trip in colour
 # limit to Montreal
@@ -103,8 +103,8 @@ focus_today
 ggsave(paste0(format(today(), "%Y-%m-%d"),"_overlay.png"), 
        dpi = 300, width = 8, height  = 6)
 
-focus_today + xlim(limits$min_lon[1], limits$max_lon[1]) + 
-  ylim(limits$min_lat[1], limits$max_lat[1])
+focus_today + xlim(limits$min_lon[1]-0.02, limits$max_lon[1]+0.02) + 
+  ylim(limits$min_lat[1]-0.005, limits$max_lat[1]+0.005)
 
 ggsave(paste0(format(today(), "%Y-%m-%d"),"_zoom.png"), 
        dpi = 300, width = 8, height  = 6)
