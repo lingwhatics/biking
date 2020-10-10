@@ -33,7 +33,10 @@ parse_GPX <- function(filename) {
 gpx <- map_df(paste0(folder, new_list), parse_GPX) %>%
   mutate(file = str_remove(file, folder))
 
-names(gpx) <- c("X", "date_time", "latitude", "longitude", "file")
+gpx <- gpx %>% select(1:2,4:6,3)
+
+names(gpx) <- c("X", "date_time", "latitude", "longitude", "file", "heart_rate")
+
 gpx$date_time <- format(ymd_hms(gpx$date_time), 
                         tz = "America/Montreal", usetz = TRUE)
 gpx$time <- format(as.POSIXct(strptime(gpx$date_time,
