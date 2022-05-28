@@ -69,8 +69,9 @@ biketrips2 <- biketrips2 %>%
   #mutate(today = as.factor(if_else(date == "2020-08-11", 1, 0)))
 
 # Plot just today's trip
-todays_ride_path <- biketrips2 %>%
-  filter(today == 1) %>%
+todays_ride_path <- biketrips %>%
+  filter(date == Sys.Date()) %>%
+#  filter(today == 1) %>%
   ggplot(aes(longitude, latitude)) + 
   geom_path() + 
   coord_map()
