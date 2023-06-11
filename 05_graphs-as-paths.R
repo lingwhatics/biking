@@ -1,7 +1,7 @@
 # Libraries
 library(XML)
 library(tidyverse)
-library(lubridate)
+#library(lubridate)
 library(janitor)
 library(ggthemes)
 
@@ -35,23 +35,27 @@ gpx <- map_df(paste0(folder, new_list), parse_GPX) |>
   select(1:2, 4:6, 3)
 
 names(gpx) <- c("X", "date_time", "latitude", "longitude", "file", "heart_rate")
+#tz_use = "America/Montreal"
 
-gpx <- gpx |>
-  mutate(tz <- "America/Montreal",
-    date_time = format(ymd_hms(date_time), tz = tz, usetz = TRUE),
+gpx <- gpx %>%
+  mutate(tz = "America/Montreal") %>%
+  mutate(
+         date_time = format(ymd_hms(date_time), tz = "America/Montreal", usetz = TRUE),
          time = format(as.POSIXct(strptime(date_time,
-                                            "%Y-%m-%d %H:%M",
-                                            tz = tz)),
-         format = "%H:%M:%S"
+                                           "%Y-%m-%d %H:%M",
+                                           tz = "America/Montreal")),
+                       format = "%H:%M:%S"
          ),
-         date = format(as.POSIXct(strptime(gpx$date_time, "%Y-%m-%d %H:%M",
-                                            tz = tz)),
-         format = "%Y-%m-%d"
-         ),
-    latitude = as.numeric(latitude),
-    longitude = as.numeric(longitude),
-    date_time = as.POSIXct(date_time)
-)
+         latitude = as.numeric(latitude),
+         longitude = as.numeric(longitude),
+         date_time = as.POSIXct(date_time)
+  ) 
+
+gpx <- gpx %>%
+  mutate(date = format(as.POSIXct(strptime(gpx$date_time, 
+                                           "%Y-%m-%d %H:%M", 
+                                           tz = "America/Montreal")), 
+                       format = "%Y-%m-%d"))
 
 biketrips <- bind_rows(biketrips, gpx)
 
@@ -66,7 +70,7 @@ biketrips2 <- biketrips |>
 # Get subset of today's trips only
 biketrips2 <- biketrips2 |>
   mutate(today = as.factor(if_else(date == Sys.Date(), 1, 0)))
-  #mutate(today = as.factor(if_else(date == "2022-07-16", 1, 0)))
+  #mutate(today = as.factor(if_else(date == "2023-06-10", 1, 0)))
 
 # Plot just today's trip
 todays_ride_path <- biketrips2 |>
@@ -112,3 +116,4 @@ ggsave(paste0(format(today(), "%Y-%m-%d"), "_zoom.png"),
 
 # write out updated data
 write_rds(biketrips, "trips.rds")
+
