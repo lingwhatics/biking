@@ -1,7 +1,6 @@
 # Libraries
 library(XML)
 library(tidyverse)
-#library(lubridate)
 library(janitor)
 library(ggthemes)
 
@@ -70,12 +69,12 @@ biketrips2 <- biketrips |>
 # Get subset of today's trips only
 biketrips2 <- biketrips2 |>
   mutate(today = as.factor(if_else(date == Sys.Date(), 1, 0)))
-  #mutate(today = as.factor(if_else(date == "2023-06-10", 1, 0)))
+  #mutate(today = as.factor(if_else(date == "2024-08-31", 1, 0)))
 
 # Plot just today's trip
 todays_ride_path <- biketrips2 |>
   filter(today == 1) |>
-  ggplot(aes(longitude, latitude)) +
+  ggplot(aes(longitude, latitude, group=time)) +
   geom_path() +
   coord_map()
 todays_ride_path
@@ -93,9 +92,10 @@ limits <- biketrips2 |>
 # Plot with all trips in grey in the background and today's trip in colour
 # limit to Montreal
 focus_today_path <- biketrips2 |>
-  filter(tz == "America/Montreal") |>
+  filter(tz == "America/Montreal", today == 0) |>
   ggplot(aes(longitude, latitude, colour = today, group = file)) +
   geom_path() +
+  geom_path(data=filter(biketrips2, today ==1), aes(longitude, latitude, colour = today, group = time)) +
   theme_void() +
   theme(legend.position = "none") +
   coord_map() +
