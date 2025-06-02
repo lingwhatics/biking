@@ -68,8 +68,8 @@ biketrips2 <- biketrips |>
 
 # Get subset of today's trips only
 biketrips2 <- biketrips2 |>
-  mutate(today = as.factor(if_else(date == Sys.Date(), 1, 0)))
-  #mutate(today = as.factor(if_else(date == "2024-08-31", 1, 0)))
+  #mutate(today = as.factor(if_else(date == Sys.Date(), 1, 0)))
+  mutate(today = as.factor(if_else(file %in% new_list, 1, 0)))
 
 # Plot just today's trip
 todays_ride_path <- biketrips2 |>
