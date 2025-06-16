@@ -114,8 +114,22 @@ ggsave(paste0(format(today(), "%Y-%m-%d"), "_overlay.png"),
   dpi = 300, width = 8, height = 6
 )
 
-focus_today_path + xlim(limits$min_lon[1] - 0.02, limits$max_lon[1] + 0.02) +
-  ylim(limits$min_lat[1] - 0.005, limits$max_lat[1] + 0.005)
+biketrips2 |>
+  filter(tz == "America/Montreal", today == 0) |>
+  ggplot(aes(longitude, latitude, colour = today, group = file)) +
+  geom_path() +
+  geom_path(data=filter(biketrips2, today ==1), aes(longitude, latitude, colour = today, group = time)) +
+  theme_void() +
+  theme(legend.position = "none") +
+  coord_sf(crs = 4269) +
+  ggthemes::scale_color_colorblind() + 
+  xlim(limits$min_lon[1] - 0.02, limits$max_lon[1] + 0.02) +
+  ylim(limits$min_lat[1] - 0.005, limits$max_lat[1] + 0.005) +
+  annotation_north_arrow(location = "bl", which_north = "true",
+                         height = unit(0.7, "cm"),
+                         width = unit(0.7, "cm"),
+                         pad_x = unit(0.4, "in"), pad_y = unit(.5, "in"),
+                         style = north_arrow_orienteering)
 
 ggsave(paste0(format(today(), "%Y-%m-%d"), "_zoom.png"),
   dpi = 300, width = 8, height = 6
