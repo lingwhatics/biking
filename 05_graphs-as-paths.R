@@ -3,6 +3,7 @@ library(XML)
 library(tidyverse)
 library(janitor)
 library(ggthemes)
+library(sf)
 
 # define function for parsing GPX inputs
 parse_GPX <- function(filename) {
@@ -98,7 +99,7 @@ focus_today_path <- biketrips2 |>
   geom_path(data=filter(biketrips2, today ==1), aes(longitude, latitude, colour = today, group = time)) +
   theme_void() +
   theme(legend.position = "none") +
-  coord_map() +
+  coord_sf(crs = 4269) +
   ggthemes::scale_color_colorblind() +
   NULL
 
