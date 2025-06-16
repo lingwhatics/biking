@@ -2,8 +2,9 @@
 library(XML)
 library(tidyverse)
 library(janitor)
-library(ggthemes)
+library(ggthemes) # colour-blind friendly options
 library(sf)
+library(ggspatial) # scale bars and north arrows
 
 # define function for parsing GPX inputs
 parse_GPX <- function(filename) {
@@ -101,6 +102,11 @@ focus_today_path <- biketrips2 |>
   theme(legend.position = "none") +
   coord_sf(crs = 4269) +
   ggthemes::scale_color_colorblind() +
+  annotation_north_arrow(location = "tl", which_north = "true",
+                         height = unit(0.7, "cm"),
+                         width = unit(0.7, "cm"),
+                         pad_x = unit(0.4, "in"), pad_y = unit(1, "in"),
+                         style = north_arrow_orienteering) + 
   NULL
 
 focus_today_path
